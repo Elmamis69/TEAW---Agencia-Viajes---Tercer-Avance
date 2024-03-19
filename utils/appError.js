@@ -13,8 +13,8 @@ const logger = winston.createLogger({
 class AppError extends Error{
 
     constructor(message,statusCode) {
-        super(message)
-        this.statusCode = statusCode
+        super(this.message)
+        this.statusCode = statusCode;
         this.status = `${statusCode}`.startsWith('4')|| `${statusCode}`.startsWith('5') ? 'fail':'error';
         this.isOperational = true
 
