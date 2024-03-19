@@ -1,0 +1,21 @@
+//Cambiar tu user y contraseña en la Config.json
+en la parte del development
+
+//Para crear la bd, abrir una terminal y escribir:
+npx sequelize db:create
+
+//Para la creacion de las tablas en la bd, escribir:
+npx sequelize db:migrate
+
+*Con eso se realiza la migracion a la bd, si marca error:*
+
+1.- Ver como se llaman las tablas en la BD, luego ir a la carpeta migrations,
+y cambiar el nombre a como aparece en la base de datos, en las siguientes lineas:
+" idUsuario: {
+        type: Sequelize.INTEGER, allowNull:false,references:{model:"Usuarios",key:"id"}
+      },", se cambia la referencia de USUARIO a USUARIOS.
+
+2.-Si por accidente nos equivocamos en la creacion de las tablas que necesitan referencia,
+podemos en la carpeta Migrations, cambiar el nombre de la clase enumerandole en el orden correcto
+para la creacion, como se encuentra : 1-create-usuario.
+
