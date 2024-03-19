@@ -19,3 +19,4 @@ const comentarioItinerarioSchema = new mongoose.Schema({
 const ComentarioItinerario = mongoose.model('ComentarioItinerario', comentarioItinerarioSchema);
 
 module.exports = ComentarioItinerario;
+ 
