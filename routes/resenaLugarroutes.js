@@ -1,5 +1,5 @@
 const express = require('express');
-const ResenaLugarController = require('../controllers/resenasLugarController');
+const ResenaLugarController = require('../controllers/resenalugarController');
 const jwtUtils = require('../utils/jwt');
 const router = express.Router();
 
