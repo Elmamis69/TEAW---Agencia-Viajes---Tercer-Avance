@@ -1,25 +1,23 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Notificacione extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
+const mongoose = require('mongoose');
+
+const notificacioneSchema = new mongoose.Schema({
+  tipoActividad: {
+    type: String,
+    required: true
+  },
+  idUsuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario',
+    required: true
+  },
+  Fecha: {
+    type: Date,
+    required: true
   }
-  Notificacione.init({
-    tipoActividad: DataTypes.STRING,
-    idUsuario: DataTypes.INTEGER,
-    Fecha: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'Notificacione',
-  });
-  return Notificacione;
-};
+}, {
+  timestamps: true
+});
+
+const Notificacione = mongoose.model('Notificacione', notificacioneSchema);
+
+module.exports = Notificacione;

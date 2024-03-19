@@ -1,26 +1,20 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class comentarioPublicacion extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-      comentarioPublicacion.belongsTo(models.Publicacion,{foreignKey:"idPublicacion"})
-    }
+const mongoose = require('mongoose');
+
+const comentarioPublicacionSchema = new mongoose.Schema({
+  idPublicacion: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Publicacion'
+  },
+  Comentario: {
+    type: String,
+    required: true
+  },
+  fecha: {
+    type: Date,
+    default: Date.now
   }
-  comentarioPublicacion.init({
-    idPublicacion: DataTypes.INTEGER,
-    Comentario: DataTypes.STRING,
-    fecha: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'comentarioPublicacion',
-  });
-  return comentarioPublicacion;
-};
+});
+
+const ComentarioPublicacion = mongoose.model('ComentarioPublicacion', comentarioPublicacionSchema);
+
+module.exports = ComentarioPublicacion;

@@ -1,25 +1,16 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class fotosDestino extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-      fotosDestino.belongsTo(models.Destino,{foreignKey:"idDestino"})
-    }
+const mongoose = require('mongoose');
+
+const fotosDestinoSchema = new mongoose.Schema({
+  idDestino: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Destino'
+  },
+  foto: {
+    type: String,
+    required: true
   }
-  fotosDestino.init({
-    idDestino: DataTypes.INTEGER,
-    foto: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'fotosDestino',
-  });
-  return fotosDestino;
-};
+});
+
+const FotosDestino = mongoose.model('FotosDestino', fotosDestinoSchema);
+
+module.exports = FotosDestino;

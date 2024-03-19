@@ -1,5 +1,5 @@
 {
-  "name": "prueba-proyecto",
+  "name": "segundoavance-parte2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mysql2": "^3.9.2",
-    "sequelize": "^6.37.1",
-    "sequelize-cli": "^6.6.2"
+    "mongoose": "^8.2.0"
   }
 }
