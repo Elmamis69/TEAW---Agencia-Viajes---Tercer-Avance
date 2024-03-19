@@ -9,7 +9,7 @@ const logger = winston.createLogger({
         new winston.transports.File({filename:'error.log'})
     ]
 })
-
+ 
 class AppError extends Error{
 
     constructor(message,statusCode) {
