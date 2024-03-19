@@ -1,28 +1,79 @@
-const { Publicacion } = require('../models');
+const PublicacionDAO = require('../dataAccess/publicacionDAO');
+const { AppError } = require('../utils/appError');
 
-async function crearPublicacion(req, res) {
-  try {
-    const { contenido, fecha, idUsuario, idDestino } = req.body;
-
-    // Validate input data
-    if (!contenido || !fecha || !idUsuario || !idDestino) {
-      return res.status(400).json({ error: 'Todos los campos son requeridos' });
+class PublicacionController {
+  static async obtenerTodasLasPublicaciones(req, res, next) {
+    try {
+      const publicaciones = await PublicacionDAO.getAllPublicaciones();
+      res.status(200).json(publicaciones);
+    } catch (error) {
+      next(new AppError('Error al obtener las publicaciones', 500));
     }
+  }
 
-    // Create a new publication
-    const nuevaPublicacion = await Publicacion.create(req.body);
-
-    // Return the new publication
-    return res.status(201).json(nuevaPublicacion);
-  } catch (error) {
-    // Handle Sequelize errors
-    if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(400).json({ error: error.errors.map(err => err.message) });
+  static async obtenerPublicacionPorId(req, res, next) {
+    try {
+      const { id } = req.params;
+      const publicacion = await PublicacionDAO.getPublicacionById(id);
+      if (!publicacion) {
+        return next(new AppError('Publicación no encontrada', 404));
+      }
+      res.status(200).json(publicacion);
+    } catch (error) {
+      next(new AppError('Error al obtener la publicación', 500));
     }
+  }
 
-    // Handle other errors
-    return res.status(500).json({ error: 'Error interno del servidor' });
+  static async obtenerPublicacionesPorUsuario(req, res, next) {
+    try {
+      const { userId } = req.params;
+      const publicaciones = await PublicacionDAO.getPublicacionesByUserId(userId);
+      res.status(200).json(publicaciones);
+    } catch (error) {
+      next(new AppError('Error al obtener las publicaciones del usuario', 500));
+    }
+  }
+
+  static async obtenerPublicacionesPorDestino(req, res, next) {
+    try {
+      const { destinoId } = req.params;
+      const publicaciones = await PublicacionDAO.getPublicacionesByDestinoId(destinoId);
+      res.status(200).json(publicaciones);
+    } catch (error) {
+      next(new AppError('Error al obtener las publicaciones del destino', 500));
+    }
+  }
+
+  static async crearPublicacion(req, res, next) {
+    try {
+      const publicacionData = req.body;
+      const publicacionCreada = await PublicacionDAO.createPublicacion(publicacionData);
+      res.status(201).json(publicacionCreada);
+    } catch (error) {
+      next(new AppError('Error al crear la publicación', 500));
+    }
+  }
+
+  static async actualizarPublicacion(req, res, next) {
+    try {
+      const { id } = req.params;
+      const publicacionData = req.body;
+      const publicacionActualizada = await PublicacionDAO.updatePublicacion(id, publicacionData);
+      res.status(200).json(publicacionActualizada);
+    } catch (error) {
+      next(new AppError('Error al actualizar la publicación', 500));
+    }
+  }
+
+  static async eliminarPublicacion(req, res, next) {
+    try {
+      const { id } = req.params;
+      await PublicacionDAO.deletePublicacion(id);
+      res.status(200).json({ message: 'Publicación eliminada correctamente' });
+    } catch (error) {
+      next(new AppError('Error al eliminar la publicación', 500));
+    }
   }
 }
 
-module.exports = crearPublicacion;
+module.exports = PublicacionController;

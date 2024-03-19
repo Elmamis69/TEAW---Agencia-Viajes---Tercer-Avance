@@ -1,116 +1,87 @@
-const { Usuario } = require('../models');
+const UsuarioDAO = require('../dataAccess/usuarioDAO');
+const jwtUtils = require('../utils/jwt');
+const { AppError } = require('../utils/appError');
 
 class UsuarioController {
-  // Crear un nuevo usuario
-  async crearUsuario(req, res) {
+  static async autenticarUsuario(req, res, next) {
     try {
-      const { NombreUsuario, correo, contrasenia, info } = req.body;
+      const { correo, contrasenia } = req.body;
+      const usuario = await UsuarioDAO.getUsuarioByUsername(correo);
 
-      // Validar los datos de entrada
-      if (!NombreUsuario || !correo || !contrasenia) {
-        return res.status(400).json({ error: 'Todos los campos son requeridos' });
+      if (!usuario || usuario.contrasenia !== contrasenia) {
+        return next(new AppError('Correo o contraseña incorrectos', 401));
       }
 
-      // Crear un nuevo usuario
-      const nuevoUsuario = await Usuario.create(req.body);
-
-      // Devolver el nuevo usuario
-      return res.status(201).json(nuevoUsuario);
+      const userData = { id: usuario._id, correo: usuario.correo };
+      const token = jwtUtils.generateToken(userData);
+      res.json({ token });
     } catch (error) {
-      // Manejar errores de Sequelize
-      if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
-        return res.status(400).json({ error: error.errors.map(err => err.message) });
-      }
-
-      // Manejar otros errores
-      return res.status(500).json({ error: 'Error interno del servidor' });
+      next(new AppError('Error al autenticar usuario', 500));
     }
   }
 
-  // Obtener todos los usuarios
-  async obtenerUsuarios(req, res) {
+  static async crearUsuario(req, res, next) {
     try {
-      const usuarios = await Usuario.findAll();
-
-      // Devolver los usuarios
-      return res.status(200).json(usuarios);
+      const { nombreUsuario, correo, contrasenia } = req.body;
+      const usuarioData = { nombreUsuario, correo, contrasenia };
+      const usuario = await UsuarioDAO.createUsuario(usuarioData);
+      res.status(201).json(usuario);
     } catch (error) {
-      // Manejar errores de Sequelize
-      return res.status(500).json({ error: 'Error interno del servidor' });
+      next(new AppError('Error al crear usuario', 500));
     }
   }
 
-  // Obtener un usuario por id
-  async obtenerUsuarioPorId(req, res) {
+  static async obtenerUsuarioPorId(req, res, next) {
+    try {
+      const usuario = await UsuarioDAO.getUsuarioById(req.params.id);
+      if (!usuario) {
+        return next(new AppError('Usuario no encontrado', 404));
+      }
+      res.status(200).json(usuario);
+    } catch (error) {
+      next(new AppError('Error al obtener usuario', 500));
+    }
+  }
+
+  static async obtenerUsuarioPorNombre(req, res, next) {
+    try {
+      const usuario = await UsuarioDAO.getUsuarioByUsername(req.params.nombreUsuario);
+      if (!usuario) {
+        return next(new AppError('Usuario no encontrado', 404));
+      }
+      res.status(200).json(usuario);
+    } catch (error) {
+      next(new AppError('Error al obtener usuario', 500));
+    }
+  }
+
+  static async obtenerUsuarios(req, res, next) {
+    try {
+      const usuarios = await UsuarioDAO.getAllUsuarios();
+      res.status(200).json(usuarios);
+    } catch (error) {
+      next(new AppError('Error al obtener usuarios', 500));
+    }
+  }
+
+  static async actualizarUsuario(req, res, next) {
     try {
       const { id } = req.params;
-
-      // Encontrar el usuario por id
-      const usuario = await Usuario.findByPk(id);
-
-      // Si el usuario no se encuentra, devolver un error 404
-      if (!usuario) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-      }
-
-      // Devolver el usuario
-      return res.status(200).json(usuario);
+      const usuarioData = req.body;
+      const usuarioActualizado = await UsuarioDAO.updateUsuario(id, usuarioData);
+      res.status(200).json(usuarioActualizado);
     } catch (error) {
-      // Manejar errores de Sequelize
-      return res.status(500).json({ error: 'Error interno del servidor' });
+      next(new AppError('Error al actualizar usuario', 500));
     }
   }
 
-  // Actualizar un usuario por id
-  async actualizarUsuario(req, res) {
+  static async eliminarUsuario(req, res, next) {
     try {
       const { id } = req.params;
-
-      // Encontrar el usuario por id
-      const usuario = await Usuario.findByPk(id);
-
-      // Si el usuario no se encuentra, devolver un error 404
-      if (!usuario) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-      }
-
-      // Actualizar el usuario
-      await usuario.update(req.body);
-
-      // Devolver el usuario actualizado
-      return res.status(200).json(usuario);
+      await UsuarioDAO.deleteUsuario(id);
+      res.status(200).json({ message: 'Usuario eliminado correctamente' });
     } catch (error) {
-      // Manejar errores de Sequelize
-      if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
-        return res.status(400).json({ error: error.errors.map(err => err.message) });
-      }
-
-      // Manejar otros errores
-      return res.status(500).json({ error: 'Error interno del servidor' });
-    }
-  }
-
-  // Eliminar un usuario por id
-  async eliminarUsuario(req, res) {
-    try {
-      const { id } = req.params;
-
-      // Encontrar el usuario por id
-      const usuario = await Usuario.findByPk(id);
-
-      // Si el usuario no se encuentra, devolver un error 404
-      if (!usuario) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-      }
-
-      // Eliminar el usuario
-      await usuario.destroy();
-
-      // Devolver un mensaje de éxito
-      return res.status(200).json({ message: 'Usuario eliminado exitosamente' });
-    } catch (error) {
-      // Manejar errores de Sequelize
-      return res.status(500).json({ error: 'Error interno del servidor' });
+      next(new AppError('Error al eliminar usuario', 500));
     }
   }
 }
