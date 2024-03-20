@@ -1,5 +1,5 @@
 const ComentarioItinerario = require('./../models/comentarioitinerario');
- 
+  
 const comentarioItinerarioDAO = {
   // Función para crear un nuevo comentario de itinerario
   async crearComentarioItinerario(idItinerario, comentario, fecha) {

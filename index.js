@@ -7,7 +7,7 @@ const db = require('./config/db');
  
 // Conexión a la base de datos
 db.conectar();
- 
+  
 // Middleware
 app.use(bodyParser.json());
 app.use(express.json());

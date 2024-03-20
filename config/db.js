@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 require('dotenv').config({path:'./variables.env'})
-
+ 
 const config={
     url:process.env.URL_MONGO,
     options:{}

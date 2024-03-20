@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
- 
+  
 const comentarioItinerarioSchema = new mongoose.Schema({
   idItinerario: {
     type: mongoose.Schema.Types.ObjectId,
