@@ -3,10 +3,10 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const { globalErrorHandler, AppError } = require('./utils/appError');
-//const db = require('./config/db');
-
+const db = require('./config/db');
+ 
 // Conexión a la base de datos
-//db.conectar();
+db.conectar();
  
 // Middleware
 app.use(bodyParser.json());

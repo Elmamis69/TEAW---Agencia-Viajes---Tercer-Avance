@@ -11,4 +11,4 @@ router.put('/:idItinerario/:idComentario', jwtUtils.verifyToken, ComentarioItine
 router.delete('/:idItinerario/:idComentario', jwtUtils.verifyToken, ComentarioItinerarioController.eliminarComentarioItinerario);
 
 module.exports = router;
- 
+  
