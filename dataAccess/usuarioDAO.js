@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Usuario = require('./usuarioSchema');
+const Usuario = require('./../models/usuario');
 
 class UsuarioDAO {
   async getAllUsuarios() {

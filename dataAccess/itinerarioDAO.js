@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Itinerario = require('./itinerarioSchema');
+const Itinerario = require('./../models/itinerario');
 
 class ItinerarioDAO {
   async getAllItinerarios() {

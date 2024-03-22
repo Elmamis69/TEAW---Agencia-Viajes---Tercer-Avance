@@ -4,7 +4,7 @@ const { AppError } = require('../utils/appError');
 class ReaccionPublicacionController {
   static async obtenerTodasLasReaccionesPublicaciones(req, res, next) {
     try {
-      const reacciones = await ReaccionPublicacionDAO.getAllReaccionPublicaciones();
+      const reacciones = await ReaccionPublicacionDAO.obtenerTodasLasReaccionesPublicaciones();
       res.status(200).json(reacciones);
     } catch (error) {
       next(new AppError('Error al obtener las reacciones de publicaciones', 500));
@@ -27,13 +27,13 @@ class ReaccionPublicacionController {
   static async obtenerReaccionesPublicacionPorPostId(req, res, next) {
     try {
       const { postId } = req.params;
-      const reacciones = await ReaccionPublicacionDAO.getReaccionPublicacionByPostId(postId);
+      const reacciones = await ReaccionPublicacionDAO.obtenerReaccionesPublicacionPorPostId(postId);
       res.status(200).json(reacciones);
     } catch (error) {
       next(new AppError('Error al obtener las reacciones de la publicación', 500));
     }
   }
-
+/*
   static async obtenerReaccionesPublicacionPorUsuarioId(req, res, next) {
     try {
       const { userId } = req.params;
@@ -43,11 +43,11 @@ class ReaccionPublicacionController {
       next(new AppError('Error al obtener las reacciones del usuario', 500));
     }
   }
-
+*/
   static async crearReaccionPublicacion(req, res, next) {
     try {
       const reaccionPublicacionData = req.body;
-      const nuevaReaccion = await ReaccionPublicacionDAO.createReaccionPublicacion(reaccionPublicacionData);
+      const nuevaReaccion = await ReaccionPublicacionDAO.crearReaccionPublicacion(reaccionPublicacionData);
       res.status(201).json(nuevaReaccion);
     } catch (error) {
       next(new AppError('Error al crear la reacción de la publicación', 500));
@@ -58,7 +58,7 @@ class ReaccionPublicacionController {
     try {
       const { id } = req.params;
       const reaccionPublicacionData = req.body;
-      const reaccionActualizada = await ReaccionPublicacionDAO.updateReaccionPublicacion(id, reaccionPublicacionData);
+      const reaccionActualizada = await ReaccionPublicacionDAO.actualizarReaccionPublicacion(id, reaccionPublicacionData);
       res.status(200).json(reaccionActualizada);
     } catch (error) {
       next(new AppError('Error al actualizar la reacción de la publicación', 500));
@@ -68,7 +68,7 @@ class ReaccionPublicacionController {
   static async eliminarReaccionPublicacion(req, res, next) {
     try {
       const { id } = req.params;
-      await ReaccionPublicacionDAO.deleteReaccionPublicacion(id);
+      await ReaccionPublicacionDAO.eliminarReaccionPublicacion(id);
       res.status(200).json({ message: 'Reacción de publicación eliminada correctamente' });
     } catch (error) {
       next(new AppError('Error al eliminar la reacción de la publicación', 500));

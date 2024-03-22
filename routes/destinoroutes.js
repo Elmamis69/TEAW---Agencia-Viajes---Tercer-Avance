@@ -4,7 +4,7 @@ const jwtUtils = require('../utils/jwt'); // Importar el módulo jwtUtils
 const router = express.Router();
 
 // Rutas para operaciones CRUD en destinos
-router.get('/', DestinoController.obtenerDestinos);
+router.get('/', DestinoController.obtenerTodosLosDestinos);
 router.get('/:id', DestinoController.obtenerDestinoPorId);
 router.post('/', jwtUtils.verifyToken, DestinoController.crearDestino); // Agregar verificación de token JWT
 router.put('/:id', jwtUtils.verifyToken, DestinoController.actualizarDestino); // Agregar verificación de token JWT

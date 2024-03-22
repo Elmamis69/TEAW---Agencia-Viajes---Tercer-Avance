@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ResenaLugar = require('./resenaLugarSchema');
+const ResenaLugar = require('./../models/resenalugar');
 
 class ResenaLugarDAO {
   async getAllResenasLugares() {

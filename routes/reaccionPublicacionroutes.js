@@ -4,7 +4,7 @@ const jwtUtils = require('../utils/jwt');
 const router = express.Router();
 
 // Rutas para operaciones CRUD en reacciones de publicaciones
-router.post('/', jwtUtils.verifyToken, ReaccionPublicacionController.crearReaccion);
-router.delete('/:idReaccion', jwtUtils.verifyToken, ReaccionPublicacionController.eliminarReaccion);
+router.post('/', jwtUtils.verifyToken, ReaccionPublicacionController.crearReaccionPublicacion);
+router.delete('/:idReaccion', jwtUtils.verifyToken, ReaccionPublicacionController.eliminarReaccionPublicacion);
 
 module.exports = router;

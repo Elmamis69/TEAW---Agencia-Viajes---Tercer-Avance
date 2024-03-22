@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Horario = require('./horarioSchema');
+const Horario = require('./../models/horario');
 
 class HorarioDAO {
   async getAllHorarios() {
