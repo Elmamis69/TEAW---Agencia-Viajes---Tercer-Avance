@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Notificacione = require('./notificacioneSchema');
+const Notificacione = require('./../models/notificacione');
 
 class NotificacioneDAO {
   async getAllNotificaciones() {

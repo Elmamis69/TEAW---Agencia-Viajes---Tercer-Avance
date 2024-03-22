@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ReaccionPublicacion = require('./reaccionPublicacionSchema');
+const ReaccionPublicacion = require('./../models/reaccionpublicacion');
 
 class ReaccionPublicacionDAO {
   async getAllReaccionPublicaciones() {

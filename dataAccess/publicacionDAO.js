@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Publicacion = require('./publicacionSchema');
+const Publicacion = require('./../models/publicacion');
 
 class PublicacionDAO {
   async getAllPublicaciones() {
